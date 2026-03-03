@@ -305,3 +305,43 @@ header {
         padding: 20px;
     }
 }
+/* ===== НИЖНЯЯ ШТОРКА ===== */
+.bottom-bar {
+    background-color: #1a2634;  /* тёмный фон */
+    color: #ecf0f1;
+    padding: 15px 5%;
+    margin-top: 50px;  /* отступ от основного контента */
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-logo img {
+    height: 40px;      /* подберите нужную высоту */
+    width: auto;
+    display: block;
+}
+
+/* Если логотипа нет, можно показать текст */
+.footer-logo::before {
+    content: "МОСКОВСКОЕ ОБРАЗОВАНИЕ IT.МОСКВА";
+    display: none; /* убрать, если используете изображение */
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    .footer-logo img {
+        height: 30px;
+    }
+}
