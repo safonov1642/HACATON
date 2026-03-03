@@ -345,3 +345,70 @@ header {
         height: 30px;
     }
 }
+/* Меню: навигация */
+.menu-nav {
+    flex: 1;
+    margin: 20px 0;
+}
+
+.menu-nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.menu-nav li {
+    margin-bottom: 15px;
+}
+
+.menu-nav a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 1.1rem;
+    display: block;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    transition: color 0.3s;
+}
+
+.menu-nav a:hover {
+    color: var(--secondary-color);
+}
+
+/* Контакты в меню */
+.menu-contacts {
+    margin-top: auto; /* прижимаем к низу, если меню flex-контейнер */
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+}
+
+.menu-contacts p {
+    margin: 10px 0;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.menu-contacts i {
+    width: 25px;
+    color: var(--secondary-color);
+}
+
+/* Чтобы контакты были внизу, меню-панель должно быть flex-колонкой */
+.menu-panel {
+    display: flex;
+    flex-direction: column;
+    /* остальные стили уже есть */
+}
+.menu-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background-color: var(--menu-bg);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column; /* добавляем */
+}
