@@ -1,1 +1,1 @@
-print('Hello hakaton')
+print('Денис мега хорош')
