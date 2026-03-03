@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Киберарена ГБПОУ ИТ.Москва</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Шторка меню (скрыта) -->
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="menu-panel">
+            <div class="menu-header">
+                <div class="profile-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <button class="close-menu" id="closeMenu"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="menu-content">
+                <p><i class="fas fa-envelope"></i> dev@itcollege.ru</p>
+                <p><i class="fas fa-phone"></i> +7 (495) 123-45-67</p>
+                <p><i class="fab fa-telegram"></i> @cyberarena_dev</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="page-content">
+        <header>
+            <div class="logo">Киберарена ИТ.Москва</div>
+            <button class="burger" id="burgerBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </header>
+
+        <main>
+            <div class="search-container">
+                <input type="search" placeholder="Поиск турниров, игр..." id="searchInput">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+
+            <section class="description">
+                <h2>О киберарене</h2>
+                <p>Добро пожаловать на киберарену колледжа ИТ.Москва! Здесь студенты могут создавать собственные турниры, находить команды и участвовать в киберспортивных баталиях. Присоединяйся к сообществу киберспортсменов!</p>
+            </section>
+
+            <section class="tournaments">
+                <h2>Ближайшие турниры</h2>
+                <div class="tournament-list">
+                    <div class="tournament-card">
+                        <span class="date">15 мая 2026, 18:00</span>
+                        <span class="game">CS:GO</span>
+                        <span class="title">Кубок первокурсников</span>
+                    </div>
+                    <div class="tournament-card">
+                        <span class="date">22 мая 2026, 16:00</span>
+                        <span class="game">Dota 2</span>
+                        <span class="title">Битва факультетов</span>
+                    </div>
+                    <div class="tournament-card">
+                        <span class="date">29 мая 2026, 15:00</span>
+                        <span class="game">Valorant</span>
+                        <span class="title">Открытый турнир</span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="create-tournament-link">
+                <a href="create.html" class="btn">Организовать турнир</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
