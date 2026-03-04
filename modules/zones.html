@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кибер-арена - Зоны</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">CyberArena</a>
+            <nav>
+                <ul>
+                    <li><a href="zones.html" class="active">Зоны</a></li>
+                    <li><a href="calendar.html">Календарь</a></li>
+                    <li><a href="my-bookings.html">Мои бронирования</a></li>
+                    <li><a href="admin/index.html" id="admin-link" class="hidden">Админка</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <span id="user-name">Гость</span>
+                <a href="login.html" class="btn btn-outline" id="auth-btn">Войти</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1>Зоны кибер-арены</h1>
+        <div class="filters">
+            <label for="type-filter">Тип зоны:</label>
+            <select id="type-filter" class="form-control" style="width: auto; display: inline-block;">
+                <option value="">Все</option>
+                <option value="gaming">Игровая</option>
+                <option value="training">Тренировочная</option>
+                <option value="team">Командная</option>
+            </select>
+        </div>
+
+        <div id="zones-container" class="card-grid">
+            <!-- Динамически загружаемые карточки зон -->
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/zones.js"></script>
+</body>
+</html>
