@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Команды | Киберарена</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Шторка меню (копия из index.html) -->
+    <!-- Шторка меню (как в index.html) -->
     <div class="menu-overlay" id="menuOverlay">
         <div class="menu-panel">
             <div class="menu-header">
@@ -17,7 +18,7 @@
             </div>
             <nav class="menu-nav">
                 <ul>
-                   <li><a href="index.html">Главная</a></li>
+                    <li><a href="index.html">Главная</a></li>
                     <li><a href="booking.html">Бронирование</a></li>
                     <li><a href="calendar.html">Календарь занятости</a></li>
                     <li><a href="achievements.html">Достижения и прогресс</a></li>
@@ -35,17 +36,18 @@
 
     <div class="page-content">
         <header>
-        <div class="logo">КиберАрена IT.Москва</div>
-        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> На главную</a>
-    </header>
+            <div class="logo">КиберАрена IT.Москва</div>
+            <button class="burger" id="burgerBtn"><i class="fas fa-bars"></i></button>
+        </header>
 
         <main>
             <h1>Команды</h1>
-<p>Управление киберспортивными командами, поиск сокомандников.</p>
-            <!-- Сюда можно добавлять свой код для этого модуля -->
+            
+
+            <div id="teamView"></div>
         </main>
 
-        <!-- Нижняя шторка с логотипом -->
+        <!-- Нижняя шторка -->
         <footer class="bottom-bar">
             <div class="footer-content">
                 <p>© 2026 Киберарена ГБПОУ ИТ.Москва</p>
@@ -57,5 +59,143 @@
     </div>
 
     <script src="js/script.js"></script>
+    <script>
+        // (весь скрипт из предыдущей версии, без изменений)
+        (function() {
+            const currentUser = { id: 1, name: 'Иван Петров' };
+            let teams = JSON.parse(localStorage.getItem('teams')) || [];
+
+            function saveTeams() {
+                localStorage.setItem('teams', JSON.stringify(teams));
+            }
+
+            function getUserTeam() {
+                return teams.find(t => t.members.some(m => m.id === currentUser.id)) || null;
+            }
+
+            function render() {
+                const container = document.getElementById('teamView');
+                const userTeam = getUserTeam();
+                if (userTeam) renderMyTeam(userTeam);
+                else renderAllTeams();
+            }
+
+            function renderMyTeam(team) {
+                const container = document.getElementById('teamView');
+                const membersHtml = team.members.map(m => `
+                    <div class="member-item">
+                        <div class="member-avatar" style="background-color: ${m.role === 'Капитан' ? '#ffc107' : '#6c757d'}">${m.name.charAt(0)}</div>
+                        <div class="member-info">
+                            <div class="member-name">${m.name} ${m.role === 'Капитан' ? '(капитан)' : ''}</div>
+                            <div class="member-rating">Рейтинг: ${m.rating}</div>
+                        </div>
+                    </div>
+                `).join('');
+                const historyHtml = team.tournamentsWon?.length 
+                    ? team.tournamentsWon.map(t => `<div class="history-item">🏆 ${t}</div>`).join('')
+                    : '<p>Пока нет побед</p>';
+
+                container.innerHTML = `
+                    <div class="team-card">
+                        <div class="team-header"><span class="team-name">${team.name}</span><span class="team-game">${team.game}</span></div>
+                        <div class="team-rating-badge">Средний рейтинг: ${team.averageRating}</div>
+                        <h3>Состав (${team.members.length})</h3><div class="team-members">${membersHtml}</div>
+                        <h3>Последние выигранные турниры</h3><div class="tournament-history">${historyHtml}</div>
+                        <button class="btn btn-danger btn-leave">Покинуть команду</button>
+                        ${team.members.find(m => m.id === currentUser.id && m.role === 'Капитан') ? '<button class="btn btn-danger btn-delete">Удалить команду</button>' : ''}
+                    </div>
+                `;
+                document.querySelector('.btn-leave')?.addEventListener('click', () => {
+                    if (confirm('Покинуть команду?')) {
+                        team.members = team.members.filter(m => m.id !== currentUser.id);
+                        if (team.members.length === 0) teams = teams.filter(t => t.id !== team.id);
+                        else team.averageRating = Math.round(team.members.reduce((sum, m) => sum + m.rating, 0) / team.members.length);
+                        saveTeams(); render();
+                    }
+                });
+                document.querySelector('.btn-delete')?.addEventListener('click', () => {
+                    if (confirm('Удалить команду?')) { teams = teams.filter(t => t.id !== team.id); saveTeams(); render(); }
+                });
+            }
+
+            function renderAllTeams() {
+                const container = document.getElementById('teamView');
+                if (teams.length === 0) {
+                    container.innerHTML = '<p style="text-align: center;">Нет доступных команд. Создайте первую!</p><div style="text-align: center; margin: 30px 0;"><button class="btn" id="createTeamBtn">Создать команду</button></div>';
+                    document.getElementById('createTeamBtn')?.addEventListener('click', showCreateForm);
+                    return;
+                }
+                const teamsHtml = teams.map(t => `
+                    <div class="team-card" data-id="${t.id}">
+                        <div class="team-header"><span class="team-name">${t.name}</span><span class="team-game">${t.game}</span></div>
+                        <div class="team-rating-badge">Средний рейтинг: ${t.averageRating}</div>
+                        <p><i class="fas fa-users"></i> ${t.members.length} участников</p>
+                        <button class="btn btn-primary btn-apply" data-id="${t.id}">Подать заявку</button>
+                    </div>
+                `).join('');
+                container.innerHTML = `
+                    <div class="filter-btns" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom:20px;">
+                        <button class="filter-btn active" data-game="all">Все игры</button>
+                        <button class="filter-btn" data-game="CS:GO">CS:GO</button>
+                        <button class="filter-btn" data-game="Dota 2">Dota 2</button>
+                        <button class="filter-btn" data-game="Valorant">Valorant</button>
+                    </div>
+                    <div class="team-list">${teamsHtml}</div>
+                    <div style="text-align:center; margin:40px 0;"><button class="btn" id="createTeamBtn">Создать новую команду</button></div>
+                `;
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        const game = this.dataset.game;
+                        document.querySelectorAll('.team-card').forEach(card => {
+                            card.style.display = (game === 'all' || card.querySelector('.team-game').innerText === game) ? 'block' : 'none';
+                        });
+                    });
+                });
+                document.querySelectorAll('.btn-apply').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const teamId = parseInt(btn.dataset.id);
+                        const team = teams.find(t => t.id === teamId);
+                        if (team) {
+                            team.members.push({ id: currentUser.id, name: currentUser.name, rating: 1000, role: 'Игрок' });
+                            team.averageRating = Math.round(team.members.reduce((sum, m) => sum + m.rating, 0) / team.members.length);
+                            saveTeams(); alert('Вы вступили в команду!'); render();
+                        }
+                    });
+                });
+                document.getElementById('createTeamBtn').addEventListener('click', showCreateForm);
+            }
+
+            function showCreateForm() {
+                const container = document.getElementById('teamView');
+                container.innerHTML = `
+                    <div class="create-team-form" style="background: white; padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); max-width: 500px; margin: 30px auto;">
+                        <h2>Создание команды</h2>
+                        <div class="form-group"><label>Название</label><input type="text" id="teamName"></div>
+                        <div class="form-group"><label>Игра</label><select id="teamGame"><option value="CS:GO">CS:GO</option><option value="Dota 2">Dota 2</option><option value="Valorant">Valorant</option></select></div>
+                        <div class="form-group"><label>Размер</label><select id="teamSize"><option value="5">5</option><option value="3">3</option><option value="2">2</option></select></div>
+                        <button class="btn" id="submitCreate">Создать</button>
+                        <button class="btn btn-outline" id="cancelCreate">Отмена</button>
+                    </div>
+                `;
+                document.getElementById('submitCreate').addEventListener('click', () => {
+                    const name = document.getElementById('teamName').value.trim();
+                    const game = document.getElementById('teamGame').value;
+                    if (!name) { alert('Введите название'); return; }
+                    const newTeam = {
+                        id: Date.now(), name, game,
+                        members: [{ id: currentUser.id, name: currentUser.name, rating: 1000, role: 'Капитан' }],
+                        tournamentsWon: [], averageRating: 1000
+                    };
+                    teams.push(newTeam); saveTeams(); render();
+                });
+                document.getElementById('cancelCreate').addEventListener('click', render);
+            }
+
+            render();
+        })();
+    </script>
 </body>
 </html>

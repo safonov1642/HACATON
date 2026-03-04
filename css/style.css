@@ -448,3 +448,191 @@ header {
     font-weight: 600;
 }
 */
+/* Достижения */
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+.achievement-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border-left: 6px solid #ccc;
+    transition: transform 0.2s;
+}
+.achievement-card:hover { transform: translateY(-5px); }
+.achievement-card.bronze { border-left-color: #cd7f32; }
+.achievement-card.silver { border-left-color: #c0c0c0; }
+.achievement-card.gold { border-left-color: #ffd700; }
+.achievement-card.platinum { border-left-color: #b0e0e6; }
+.achievement-card.completed { background: #f0fff0; }
+.progress-bar {
+    height: 12px;
+    background: #e9ecef;
+    border-radius: 20px;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+.achievement-card.bronze .progress-fill { background: #cd7f32; }
+.achievement-card.silver .progress-fill { background: #c0c0c0; }
+.achievement-card.gold .progress-fill { background: #ffd700; }
+.achievement-card.platinum .progress-fill { background: #b0e0e6; }
+.progress-percent {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4F5A6F;
+    white-space: nowrap;
+}
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.rating-box {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 20px;
+    border-radius: var(--border-radius);
+    font-weight: bold;
+}
+.badge-btn {
+    background: none;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 4px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+.badge-btn:hover { background: var(--primary-color); color: white; }
+.badge-btn.active { background: var(--primary-color); color: white; }
+
+/* Турниры */
+.tournament-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: 0.2s;
+}
+.tournament-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+}
+.modal.active { display: flex; }
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: var(--border-radius);
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+}
+.close-modal {
+    position: absolute;
+    top: 15px; right: 20px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #aaa;
+}
+.computer-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px,1fr));
+    gap: 10px;
+    margin: 20px 0;
+}
+.computer-option {
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+.computer-option:hover { border-color: var(--secondary-color); }
+.computer-option.selected { border-color: #28a745; background: #d4edda; }
+.bracket {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    background: #f0f0f0;
+    padding: 15px;
+    border-radius: var(--border-radius);
+}
+.bracket-round { margin: 10px; }
+.bracket-match {
+    background: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    min-width: 140px;
+    text-align: center;
+}
+.btn-register { background: #28a745; color: white; border: none; padding: 12px; width: 100%; border-radius: var(--border-radius); }
+.btn-register:hover { background: #218838; }
+
+/* Команды */
+.team-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+}
+.team-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.team-name { font-size: 1.4rem; font-weight: bold; color: var(--primary-color); }
+.team-game { background: var(--light-gray); padding: 5px 12px; border-radius: 20px; }
+.team-rating-badge {
+    background: var(--secondary-color);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+.member-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+.member-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+}
+.btn-danger { background-color: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: var(--border-radius); }
+.btn-danger:hover { background-color: #c82333; }
+.btn-outline { background: transparent; border: 1px solid var(--primary-color); color: var(--primary-color); }
+.btn-outline:hover { background: var(--primary-color); color: white; }
+.create-team-form { max-width: 500px; margin: 30px auto; background: white; padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); }
+.filter-btn {
+    background: transparent; border: 1px solid #ddd; padding: 8px 18px; border-radius: 40px;
+    cursor: pointer; transition: 0.2s;
+}
+.filter-btn.active { background: var(--secondary-color); color: white; border-color: var(--secondary-color); }

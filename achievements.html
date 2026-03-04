@@ -5,10 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Достижения и прогресс | Киберарена</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Дополнительные стили для страницы достижений (можно перенести в style.css) */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        .achievement-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-left: 6px solid #ccc;
+            transition: transform 0.2s;
+        }
+        .achievement-card:hover { transform: translateY(-5px); }
+        .achievement-card.bronze { border-left-color: #cd7f32; }
+        .achievement-card.silver { border-left-color: #c0c0c0; }
+        .achievement-card.gold { border-left-color: #ffd700; }
+        .achievement-card.platinum { border-left-color: #b0e0e6; }
+        .achievement-card.completed { background: #f0fff0; }
+        .progress-bar {
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .achievement-card.bronze .progress-fill { background: #cd7f32; }
+        .achievement-card.silver .progress-fill { background: #c0c0c0; }
+        .achievement-card.gold .progress-fill { background: #ffd700; }
+        .achievement-card.platinum .progress-fill { background: #b0e0e6; }
+        .progress-percent {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #4F5A6F;
+            white-space: nowrap;
+        }
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .rating-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            font-weight: bold;
+        }
+        .badge-btn {
+            background: none;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .badge-btn:hover { background: var(--primary-color); color: white; }
+        .badge-btn.active { background: var(--primary-color); color: white; }
+        .filter-btn {
+            background: transparent;
+            border: 1px solid #ddd;
+            padding: 8px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .filter-btn.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+    </style>
 </head>
 <body>
-    <!-- Шторка меню (копия из index.html) -->
+    <!-- Шторка меню (как в index.html) -->
     <div class="menu-overlay" id="menuOverlay">
         <div class="menu-panel">
             <div class="menu-header">
@@ -27,26 +107,46 @@
                 </ul>
             </nav>
             <div class="menu-contacts">
-                <p><i class="fas fa-envelope"></i> orden@gmail.com </p>
+               <p><i class="fas fa-envelope"></i> orden@gmail.com </p>
                 <p><i class="fab fa-telegram"></i> Руководитель проекта: @safonovta</p>
-                
             </div>
         </div>
     </div>
 
     <div class="page-content">
         <header>
-        <div class="logo">КиберАрена IT.Москва</div>
-        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> На главную</a>
-    </header>
+            <div class="logo">КиберАрена IT.Москва</div>
+            <button class="burger" id="burgerBtn"><i class="fas fa-bars"></i></button>
+        </header>
 
         <main>
-            <h1>Достижения и прогресс</h1>
-            <p>Таблица личных достижений, уровней и прогресса.</p>
-            <!-- Сюда можно добавлять свой код для этого модуля -->
+            <div class="achievements-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 30px;">
+                <h1>Достижения и прогресс</h1>
+                <div class="rating-box" id="totalRating">
+                    <i class="fas fa-star"></i> <span id="ratingValue">0</span>
+                </div>
+            </div>
+
+            <!-- Фильтры по уровням -->
+            <div class="filter-container" style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="filter-btn active" data-level="all">Все</button>
+                <button class="filter-btn" data-level="bronze">Бронза</button>
+                <button class="filter-btn" data-level="silver">Серебро</button>
+                <button class="filter-btn" data-level="gold">Золото</button>
+                <button class="filter-btn" data-level="platinum">Платина</button>
+            </div>
+
+            <!-- Контейнер достижений -->
+            <div id="achievementsContainer" class="achievements-grid"></div>
+
+            <!-- Информация о настройках профиля (сбрасывается при перезагрузке) -->
+            <div class="profile-info" style="margin-top: 30px; padding: 15px; background: #e8f4fd; border-radius: var(--border-radius);">
+                <p><i class="fas fa-info-circle"></i> Текущий значок: <span id="currentBadge">не установлен</span> | Текущий фон: <span id="currentBackground">не установлен</span></p>
+                <p><small>Выбранные значок и фон применяются к иконке профиля и фону страницы, но сбрасываются после перезагрузки.</small></p>
+            </div>
         </main>
 
-        <!-- Нижняя шторка с логотипом -->
+        <!-- Нижняя шторка -->
         <footer class="bottom-bar">
             <div class="footer-content">
                 <p>© 2026 Киберарена ГБПОУ ИТ.Москва</p>
@@ -58,5 +158,224 @@
     </div>
 
     <script src="js/script.js"></script>
+    <script>
+        (function() {
+            // Определение достижений (неизменны)
+            const achievements = [
+                {
+                    id: 1,
+                    title: 'Часы в кибер арене',
+                    desc: 'Проведите время за играми',
+                    icon: 'fa-solid fa-clock',
+                    type: 'hours',
+                    levels: [
+                        { level: 'bronze', target: 5, rating: 10 },
+                        { level: 'silver', target: 20, rating: 25 },
+                        { level: 'gold', target: 50, rating: 50 },
+                        { level: 'platinum', target: 100, rating: 100 }
+                    ]
+                },
+                {
+                    id: 2,
+                    title: 'Победы в одиночных турнирах',
+                    desc: 'Выигрывайте турниры самостоятельно',
+                    icon: 'fa-solid fa-trophy',
+                    type: 'solo_wins',
+                    levels: [
+                        { level: 'bronze', target: 1, rating: 15 },
+                        { level: 'silver', target: 5, rating: 40 },
+                        { level: 'gold', target: 15, rating: 80 },
+                        { level: 'platinum', target: 30, rating: 150 }
+                    ]
+                },
+                {
+                    id: 3,
+                    title: 'Победы в командных турнирах',
+                    desc: 'Побеждайте вместе с командой',
+                    icon: 'fa-solid fa-users',
+                    type: 'team_wins',
+                    levels: [
+                        { level: 'bronze', target: 1, rating: 20 },
+                        { level: 'silver', target: 5, rating: 50 },
+                        { level: 'gold', target: 15, rating: 100 },
+                        { level: 'platinum', target: 30, rating: 200 }
+                    ]
+                },
+                {
+                    id: 4,
+                    title: 'Участие в турнирах по разным играм',
+                    desc: 'Играйте в разные игры на турнирах',
+                    icon: 'fa-solid fa-gamepad',
+                    type: 'games_participated',
+                    levels: [
+                        { level: 'bronze', target: 2, rating: 10 },
+                        { level: 'silver', target: 5, rating: 30 },
+                        { level: 'gold', target: 10, rating: 60 },
+                        { level: 'platinum', target: 20, rating: 120 }
+                    ]
+                }
+            ];
+
+            // Инициализация данных пользователя: всё с нуля при каждой загрузке
+            let userData = {
+                rating: 0,
+                equippedBadge: null,
+                equippedBackground: null,
+                progress: { hours: 0, solo_wins: 0, team_wins: 0, games_participated: 0 }
+            };
+
+            // Функции для работы с данными (без сохранения в localStorage)
+            function getProgress(type) {
+                return userData.progress[type] || 0;
+            }
+
+            function getCurrentLevel(ach) {
+                const val = getProgress(ach.type);
+                for (let i = ach.levels.length - 1; i >= 0; i--) {
+                    if (val >= ach.levels[i].target) return ach.levels[i];
+                }
+                return null;
+            }
+
+            function getNextLevel(ach) {
+                const val = getProgress(ach.type);
+                return ach.levels.find(l => l.target > val) || ach.levels[ach.levels.length - 1];
+            }
+
+            function calculateRating() {
+                let total = 0;
+                achievements.forEach(ach => {
+                    const level = getCurrentLevel(ach);
+                    if (level) total += level.rating;
+                });
+                userData.rating = total;
+                return total;
+            }
+
+            function increaseProgress(type) {
+                userData.progress[type] = (userData.progress[type] || 0) + 1;
+                calculateRating();
+                renderAchievements();
+                applyProfileSettings();
+            }
+
+            function applyProfileSettings() {
+                const pageContent = document.querySelector('.page-content');
+                pageContent.style.background = userData.equippedBackground || '';
+                const profileIcon = document.querySelector('.profile-icon i');
+                if (profileIcon) profileIcon.style.color = userData.equippedBadge || '';
+                document.getElementById('currentBadge').innerText = userData.equippedBadge ? 'установлен' : 'не установлен';
+                document.getElementById('currentBackground').innerText = userData.equippedBackground ? 'установлен' : 'не установлен';
+                document.getElementById('ratingValue').innerText = userData.rating;
+            }
+
+            function renderAchievements() {
+                const container = document.getElementById('achievementsContainer');
+                container.innerHTML = '';
+
+                achievements.forEach(ach => {
+                    const currentVal = getProgress(ach.type);
+                    const currentLevel = getCurrentLevel(ach);
+                    const nextLevel = getNextLevel(ach);
+                    const levelClass = currentLevel ? currentLevel.level : 'bronze';
+                    const progressPercent = nextLevel ? Math.min(100, (currentVal / nextLevel.target) * 100) : 100;
+                    const percentText = nextLevel ? Math.round(progressPercent) + '%' : '100%';
+                    const completed = currentLevel !== null;
+
+                    const card = document.createElement('div');
+                    card.className = `achievement-card ${levelClass} ${completed ? 'completed' : ''}`;
+                    card.innerHTML = `
+                        <div class="achievement-header" style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                            <div class="achievement-icon" style="font-size: 2.5rem; width: 60px; height: 60px; background: var(--light-gray); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas ${ach.icon}"></i>
+                            </div>
+                            <div>
+                                <div class="achievement-title" style="font-size: 1.2rem; font-weight: 600;">${ach.title}</div>
+                                <div class="achievement-desc" style="color: #666; font-size: 0.9rem;">${ach.desc}</div>
+                            </div>
+                        </div>
+                        <div class="progress-container" style="display: flex; align-items: center; gap: 10px;">
+                            <div class="progress-bar" style="flex: 1;"><div class="progress-fill" style="width: ${progressPercent}%;"></div></div>
+                            <span class="progress-percent">${percentText}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #666; margin: 10px 0;">
+                            <span>Прогресс: <strong>${currentVal}</strong> / <strong>${nextLevel ? nextLevel.target : '—'}</strong></span>
+                            <span>Цель: ${nextLevel ? nextLevel.level : 'max'}</span>
+                        </div>
+                        <div class="level-badges" style="display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0;">
+                            ${ach.levels.map(lvl => `
+                                <span class="level-badge" style="background: ${currentVal >= lvl.target ? 'var(--secondary-color)' : '#f0f0f0'}; color: ${currentVal >= lvl.target ? 'white' : '#333'}; padding: 2px 8px; border-radius: 20px; font-size: 0.8rem;">
+                                    ${lvl.level}: ${lvl.target} (${lvl.rating} ★)
+                                </span>
+                            `).join('')}
+                        </div>
+                        <div class="achievement-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="achievement-rating" style="background: var(--primary-color); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem;">
+                                <i class="fas fa-star"></i> ${currentLevel ? currentLevel.rating : 0}
+                            </span>
+                            <div class="achievement-actions" style="display: flex; gap: 10px;">
+                                ${completed ? `
+                                    <button class="badge-btn ${userData.equippedBadge === 'badge-'+ach.id ? 'active' : ''}" data-action="badge" data-id="${ach.id}">Значок</button>
+                                    <button class="badge-btn ${userData.equippedBackground === 'bg-'+ach.id ? 'active' : ''}" data-action="bg" data-id="${ach.id}" data-level="${levelClass}">Фон</button>
+                                ` : ''}
+                                <button class="badge-btn" data-action="increase" data-type="${ach.type}">+1</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+
+                // Обработчики кнопок
+                document.querySelectorAll('.badge-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const action = btn.dataset.action;
+                        if (action === 'increase') {
+                            increaseProgress(btn.dataset.type);
+                        } else if (action === 'badge') {
+                            const id = btn.dataset.id;
+                            const badgeKey = 'badge-'+id;
+                            userData.equippedBadge = userData.equippedBadge === badgeKey ? null : badgeKey;
+                            applyProfileSettings();
+                            renderAchievements(); // перерисовка для обновления active-класса
+                        } else if (action === 'bg') {
+                            const id = btn.dataset.id;
+                            const level = btn.dataset.level;
+                            const bgKey = 'bg-'+id;
+                            if (userData.equippedBackground === bgKey) {
+                                userData.equippedBackground = null;
+                            } else {
+                                let bgColor = '';
+                                if (level === 'bronze') bgColor = 'linear-gradient(145deg, #f3e9d2, #cd7f32)';
+                                else if (level === 'silver') bgColor = 'linear-gradient(145deg, #f0f0f0, #a0a0a0)';
+                                else if (level === 'gold') bgColor = 'linear-gradient(145deg, #fff2b5, #ffd700)';
+                                else if (level === 'platinum') bgColor = 'linear-gradient(145deg, #e8f0f8, #b0c4de)';
+                                userData.equippedBackground = bgColor;
+                            }
+                            applyProfileSettings();
+                            renderAchievements();
+                        }
+                    });
+                });
+            }
+
+            // Фильтрация по уровню
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const level = this.dataset.level;
+                    document.querySelectorAll('.achievement-card').forEach(card => {
+                        card.style.display = (level === 'all' || card.classList.contains(level)) ? 'block' : 'none';
+                    });
+                });
+            });
+
+            // Инициализация
+            calculateRating();
+            renderAchievements();
+            applyProfileSettings();
+        })();
+    </script>
 </body>
 </html>
