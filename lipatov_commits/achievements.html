@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Турниры и соревнования | Киберарена</title>
+    <title>Достижения и прогресс | Киберарена</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
@@ -42,33 +42,31 @@
         </header>
 
         <main>
-            <h1>Турниры и соревнования</h1>
-            <p>Список активных турниров, возможность регистрации.</p>
+            <div class="achievements-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 30px;">
+                <h1>Достижения и прогресс</h1>
+                <div class="rating-box" id="totalRating">
+                    <i class="fas fa-star"></i> <span id="ratingValue">0</span>
+                </div>
+            </div>
 
-            <div id="tournamentGrid" class="tournament-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 30px;"></div>
+            <!-- Фильтры по уровням -->
+            <div class="filter-container" style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="filter-btn active" data-level="all">Все</button>
+                <button class="filter-btn" data-level="bronze">Бронза</button>
+                <button class="filter-btn" data-level="silver">Серебро</button>
+                <button class="filter-btn" data-level="gold">Золото</button>
+                <button class="filter-btn" data-level="platinum">Платина</button>
+            </div>
 
-            <div style="text-align: center; margin: 40px 0;">
-                <a href="create.html" class="btn">Организовать турнир</a>
+            <!-- Контейнер достижений -->
+            <div id="achievementsContainer" class="achievements-grid"></div>
+
+            <!-- Информация о настройках профиля -->
+            <div class="profile-info" style="margin-top: 30px; padding: 15px; background: #e8f4fd; border-radius: var(--border-radius);">
+                <p><i class="fas fa-info-circle"></i> Текущий значок: <span id="currentBadge">не установлен</span> | Текущий фон: <span id="currentBackground">не установлен</span></p>
+                <p><small>Выбранные значок и фон сохраняются и применяются к иконке профиля и фону страницы.</small></p>
             </div>
         </main>
-
-        <!-- Модальное окно деталей турнира -->
-        <div class="modal" id="tournamentModal">
-            <div class="modal-content">
-                <span class="close-modal" id="closeModal">&times;</span>
-                <div id="modalContent"></div>
-            </div>
-        </div>
-
-        <!-- Модальное окно выбора компьютера -->
-        <div class="modal" id="computerModal">
-            <div class="modal-content">
-                <span class="close-modal" id="closeComputerModal">&times;</span>
-                <h2>Выберите компьютер для бронирования</h2>
-                <div class="computer-options" id="computerOptions"></div>
-                <button class="btn" id="confirmBooking" style="width:100%; margin-top: 20px;">Подтвердить бронь</button>
-            </div>
-        </div>
 
         <!-- Нижняя шторка -->
         <footer class="bottom-bar">
@@ -83,146 +81,200 @@
 
     <script src="js/script.js"></script>
     <script>
-        // (весь скрипт из предыдущей версии, без изменений)
         (function() {
-            let tournaments = JSON.parse(localStorage.getItem('tournaments')) || [];
-            const grid = document.getElementById('tournamentGrid');
-            const modal = document.getElementById('tournamentModal');
-            const modalContent = document.getElementById('modalContent');
-            const closeModal = document.getElementById('closeModal');
-            const computerModal = document.getElementById('computerModal');
-            const closeComputerModal = document.getElementById('closeComputerModal');
-            const computerOptions = document.getElementById('computerOptions');
-            const confirmBooking = document.getElementById('confirmBooking');
+            const achievements = [
+                { id: 1, title: 'Часы в кибер арене', desc: 'Проведите время за играми', icon: 'fa-solid fa-clock', type: 'hours',
+                  levels: [
+                      { level: 'bronze', target: 5, rating: 10 },
+                      { level: 'silver', target: 20, rating: 25 },
+                      { level: 'gold', target: 50, rating: 50 },
+                      { level: 'platinum', target: 100, rating: 100 }
+                  ] },
+                { id: 2, title: 'Победы в одиночных турнирах', desc: 'Выигрывайте турниры самостоятельно', icon: 'fa-solid fa-trophy', type: 'solo_wins',
+                  levels: [
+                      { level: 'bronze', target: 1, rating: 15 },
+                      { level: 'silver', target: 5, rating: 40 },
+                      { level: 'gold', target: 15, rating: 80 },
+                      { level: 'platinum', target: 30, rating: 150 }
+                  ] },
+                { id: 3, title: 'Победы в командных турнирах', desc: 'Побеждайте вместе с командой', icon: 'fa-solid fa-users', type: 'team_wins',
+                  levels: [
+                      { level: 'bronze', target: 1, rating: 20 },
+                      { level: 'silver', target: 5, rating: 50 },
+                      { level: 'gold', target: 15, rating: 100 },
+                      { level: 'platinum', target: 30, rating: 200 }
+                  ] },
+                { id: 4, title: 'Участие в турнирах по разным играм', desc: 'Играйте в разные игры на турнирах', icon: 'fa-solid fa-gamepad', type: 'games_participated',
+                  levels: [
+                      { level: 'bronze', target: 2, rating: 10 },
+                      { level: 'silver', target: 5, rating: 30 },
+                      { level: 'gold', target: 10, rating: 60 },
+                      { level: 'platinum', target: 20, rating: 120 }
+                  ] }
+            ];
 
-            let selectedTournament = null;
-            let selectedComputer = null;
+            let userData = JSON.parse(localStorage.getItem('cyberarena_user')) || {
+                rating: 0,
+                equippedBadge: null,
+                equippedBackground: null,
+                progress: { hours: 0, solo_wins: 0, team_wins: 0, games_participated: 0 }
+            };
 
-            function renderTournaments() {
-                if (tournaments.length === 0) {
-                    grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Нет активных турниров. Создайте первый!</p>';
-                    return;
+            function saveUserData() {
+                localStorage.setItem('cyberarena_user', JSON.stringify(userData));
+            }
+
+            function getProgress(type) {
+                return userData.progress[type] || 0;
+            }
+
+            function getCurrentLevel(ach) {
+                const val = getProgress(ach.type);
+                for (let i = ach.levels.length - 1; i >= 0; i--) {
+                    if (val >= ach.levels[i].target) return ach.levels[i];
                 }
-                grid.innerHTML = '';
-                tournaments.forEach(t => {
+                return null;
+            }
+
+            function getNextLevel(ach) {
+                const val = getProgress(ach.type);
+                return ach.levels.find(l => l.target > val) || ach.levels[ach.levels.length - 1];
+            }
+
+            function calculateRating() {
+                let total = 0;
+                achievements.forEach(ach => {
+                    const level = getCurrentLevel(ach);
+                    if (level) total += level.rating;
+                });
+                userData.rating = total;
+                saveUserData();
+                return total;
+            }
+
+            function increaseProgress(type) {
+                userData.progress[type] = (userData.progress[type] || 0) + 1;
+                calculateRating();
+                saveUserData();
+                renderAchievements();
+                applyProfileSettings();
+            }
+
+            function applyProfileSettings() {
+                const pageContent = document.querySelector('.page-content');
+                pageContent.style.background = userData.equippedBackground || '';
+                const profileIcon = document.querySelector('.profile-icon i');
+                if (profileIcon) profileIcon.style.color = userData.equippedBadge || '';
+                document.getElementById('currentBadge').innerText = userData.equippedBadge ? 'установлен' : 'не установлен';
+                document.getElementById('currentBackground').innerText = userData.equippedBackground ? 'установлен' : 'не установлен';
+                document.getElementById('ratingValue').innerText = userData.rating;
+            }
+
+            function renderAchievements() {
+                const container = document.getElementById('achievementsContainer');
+                container.innerHTML = '';
+
+                achievements.forEach(ach => {
+                    const currentVal = getProgress(ach.type);
+                    const currentLevel = getCurrentLevel(ach);
+                    const nextLevel = getNextLevel(ach);
+                    const levelClass = currentLevel ? currentLevel.level : 'bronze';
+                    const progressPercent = nextLevel ? Math.min(100, (currentVal / nextLevel.target) * 100) : 100;
+                    const percentText = nextLevel ? Math.round(progressPercent) + '%' : '100%';
+                    const completed = currentLevel !== null;
+
                     const card = document.createElement('div');
-                    card.className = 'tournament-card';
-                    card.dataset.id = t.id;
+                    card.className = `achievement-card ${levelClass} ${completed ? 'completed' : ''}`;
                     card.innerHTML = `
-                        <div style="font-size: 2rem; margin-bottom: 10px; color: var(--primary-color);"><i class="fas fa-gamepad"></i></div>
-                        <h3>${t.name}</h3>
-                        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; font-size: 0.9rem; color: #555;">
-                            <div><i class="fas fa-calendar"></i> ${new Date(t.date).toLocaleString()}</div>
-                            <div><i class="fas fa-users"></i> ${t.teamSize} чел</div>
+                        <div class="achievement-header" style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                            <div class="achievement-icon" style="font-size: 2.5rem; width: 60px; height: 60px; background: var(--light-gray); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas ${ach.icon}"></i>
+                            </div>
+                            <div>
+                                <div class="achievement-title" style="font-size: 1.2rem; font-weight: 600;">${ach.title}</div>
+                                <div class="achievement-desc" style="color: #666; font-size: 0.9rem;">${ach.desc}</div>
+                            </div>
                         </div>
-                        <div style="background: var(--light-gray); padding: 5px 10px; border-radius: 20px; display: inline-block; font-size: 0.85rem;">${t.game}</div>
+                        <div class="progress-container" style="display: flex; align-items: center; gap: 10px;">
+                            <div class="progress-bar" style="flex: 1;"><div class="progress-fill" style="width: ${progressPercent}%;"></div></div>
+                            <span class="progress-percent">${percentText}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #666; margin: 10px 0;">
+                            <span>Прогресс: <strong>${currentVal}</strong> / <strong>${nextLevel ? nextLevel.target : '—'}</strong></span>
+                            <span>Цель: ${nextLevel ? nextLevel.level : 'max'}</span>
+                        </div>
+                        <div class="level-badges" style="display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0;">
+                            ${ach.levels.map(lvl => `
+                                <span class="level-badge" style="background: ${currentVal >= lvl.target ? 'var(--secondary-color)' : '#f0f0f0'}; color: ${currentVal >= lvl.target ? 'white' : '#333'}; padding: 2px 8px; border-radius: 20px; font-size: 0.8rem;">
+                                    ${lvl.level}: ${lvl.target} (${lvl.rating} ★)
+                                </span>
+                            `).join('')}
+                        </div>
+                        <div class="achievement-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="achievement-rating" style="background: var(--primary-color); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem;">
+                                <i class="fas fa-star"></i> ${currentLevel ? currentLevel.rating : 0}
+                            </span>
+                            <div class="achievement-actions" style="display: flex; gap: 10px;">
+                                ${completed ? `
+                                    <button class="badge-btn ${userData.equippedBadge === 'badge-'+ach.id ? 'active' : ''}" data-action="badge" data-id="${ach.id}">Значок</button>
+                                    <button class="badge-btn ${userData.equippedBackground === 'bg-'+ach.id ? 'active' : ''}" data-action="bg" data-id="${ach.id}" data-level="${levelClass}">Фон</button>
+                                ` : ''}
+                                <button class="badge-btn" data-action="increase" data-type="${ach.type}">+1</button>
+                            </div>
+                        </div>
                     `;
-                    card.addEventListener('click', () => openTournamentModal(t));
-                    grid.appendChild(card);
+                    container.appendChild(card);
                 });
-            }
 
-            function openTournamentModal(tournament) {
-                selectedTournament = tournament;
-                let teamsHtml = '';
-                if (tournament.teams && tournament.teams.length) {
-                    teamsHtml = tournament.teams.map(t => `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee;">
-                            <span>${t.name}</span>
-                            <span style="background: var(--primary-color); color: white; padding: 3px 10px; border-radius: 20px; font-size: 0.85rem;">Рейтинг: ${t.rating}</span>
-                        </div>
-                    `).join('');
-                } else {
-                    teamsHtml = '<p>Нет зарегистрированных команд</p>';
-                }
-
-                let bracketHtml = '';
-                if (tournament.bracket && tournament.bracket.length) {
-                    bracketHtml = '<div class="bracket">';
-                    tournament.bracket.forEach(round => {
-                        bracketHtml += `<div class="bracket-round"><h4>Раунд ${round.round}</h4>`;
-                        round.matches.forEach(m => {
-                            bracketHtml += `<div class="bracket-match">${m}</div>`;
-                        });
-                        bracketHtml += '</div>';
+                document.querySelectorAll('.badge-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const action = btn.dataset.action;
+                        if (action === 'increase') {
+                            increaseProgress(btn.dataset.type);
+                        } else if (action === 'badge') {
+                            const id = btn.dataset.id;
+                            const badgeKey = 'badge-'+id;
+                            userData.equippedBadge = userData.equippedBadge === badgeKey ? null : badgeKey;
+                            saveUserData();
+                            applyProfileSettings();
+                            renderAchievements();
+                        } else if (action === 'bg') {
+                            const id = btn.dataset.id;
+                            const level = btn.dataset.level;
+                            const bgKey = 'bg-'+id;
+                            if (userData.equippedBackground === bgKey) {
+                                userData.equippedBackground = null;
+                            } else {
+                                let bgColor = '';
+                                if (level === 'bronze') bgColor = 'linear-gradient(145deg, #f3e9d2, #cd7f32)';
+                                else if (level === 'silver') bgColor = 'linear-gradient(145deg, #f0f0f0, #a0a0a0)';
+                                else if (level === 'gold') bgColor = 'linear-gradient(145deg, #fff2b5, #ffd700)';
+                                else if (level === 'platinum') bgColor = 'linear-gradient(145deg, #e8f0f8, #b0c4de)';
+                                userData.equippedBackground = bgColor;
+                            }
+                            saveUserData();
+                            applyProfileSettings();
+                            renderAchievements();
+                        }
                     });
-                    bracketHtml += '</div>';
-                } else {
-                    bracketHtml = '<p>Сетка ещё не сформирована</p>';
-                }
-
-                modalContent.innerHTML = `
-                    <h2>${tournament.name}</h2>
-                    <p><strong>Игра:</strong> ${tournament.game}</p>
-                    <p><strong>Дата:</strong> ${new Date(tournament.date).toLocaleString()}</p>
-                    <p><strong>Состав команды:</strong> ${tournament.teamSize} человек</p>
-                    <h3>Заявленные команды</h3>
-                    <div class="teams-list">${teamsHtml}</div>
-                    <h3>Турнирная сетка</h3>
-                    ${bracketHtml}
-                    <button class="btn btn-register" id="registerBtn" style="width:100%; margin-top:20px; background: #28a745; color: white; border: none; padding: 12px;">Зарегистрироваться на турнир</button>
-                `;
-                modal.classList.add('active');
-
-                document.getElementById('registerBtn').addEventListener('click', () => {
-                    modal.classList.remove('active');
-                    openComputerSelection();
                 });
             }
 
-            closeModal.addEventListener('click', () => modal.classList.remove('active'));
-
-            function openComputerSelection() {
-                const computers = [
-                    { id: 1, name: 'Компьютер A1' },
-                    { id: 2, name: 'Компьютер A2' },
-                    { id: 3, name: 'Компьютер B1' },
-                    { id: 4, name: 'Компьютер B2' }
-                ];
-                computerOptions.innerHTML = '';
-                computers.forEach(c => {
-                    const div = document.createElement('div');
-                    div.className = 'computer-option';
-                    div.textContent = c.name;
-                    div.dataset.id = c.id;
-                    div.addEventListener('click', () => {
-                        document.querySelectorAll('.computer-option').forEach(opt => opt.classList.remove('selected'));
-                        div.classList.add('selected');
-                        selectedComputer = c;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const level = this.dataset.level;
+                    document.querySelectorAll('.achievement-card').forEach(card => {
+                        card.style.display = (level === 'all' || card.classList.contains(level)) ? 'block' : 'none';
                     });
-                    computerOptions.appendChild(div);
                 });
-                computerModal.classList.add('active');
-            }
-
-            closeComputerModal.addEventListener('click', () => {
-                computerModal.classList.remove('active');
-                selectedComputer = null;
             });
 
-            confirmBooking.addEventListener('click', () => {
-                if (!selectedComputer) {
-                    alert('Выберите компьютер');
-                    return;
-                }
-                let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
-                bookings.push({
-                    computer: selectedComputer.name,
-                    tournament: selectedTournament.name,
-                    date: new Date().toISOString()
-                });
-                localStorage.setItem('bookings', JSON.stringify(bookings));
-                alert(`Вы зарегистрированы на турнир "${selectedTournament.name}" и забронирован ${selectedComputer.name}`);
-                computerModal.classList.remove('active');
-                selectedComputer = null;
-            });
-
-            window.addEventListener('click', (e) => {
-                if (e.target === modal) modal.classList.remove('active');
-                if (e.target === computerModal) computerModal.classList.remove('active');
-            });
-
-            renderTournaments();
+            calculateRating();
+            renderAchievements();
+            applyProfileSettings();
         })();
     </script>
 </body>
