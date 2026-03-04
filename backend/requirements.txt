@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary  # для PostgreSQL, если используете его
+python-jose[cryptography]
+passlib[bcrypt]
+python-dotenv
+pydantic-settings
+alembic
