@@ -7,7 +7,7 @@
     --light-gray: #ecf0f1;
     --menu-bg: #fff;
     --shadow: 0 2px 10px rgba(0,0,0,0.1);
-    --border-radius: 8px;
+    --border-radius: 16px;   /* или 20px, если хотите ещё сильнее */
 }
 
 * {
@@ -149,10 +149,13 @@ header {
 
 /* Описание */
 .description {
-    text-align: center;
+    background: #fff;                     /* белый фон */
+    padding: 20px;                         /* внутренние отступы */
+    border-radius: var(--border-radius);   /* скругление углов (8px) */
+    box-shadow: var(--shadow);              /* тень как у карточек */
     max-width: 800px;
     margin: 40px auto;
-    padding: 0 20px;
+    text-align: center;
 }
 
 .description h2 {
@@ -165,6 +168,7 @@ header {
     line-height: 1.6;
     color: #555;
 }
+
 
 /* Турниры */
 .tournaments {
@@ -421,7 +425,7 @@ header {
     opacity: 0.9;
 }
 .welcome-message {
-    margin: 20px 0 10px 5%;      /* отступ слева 5% */
+     margin: 20px 0 100px 5%;   /* теперь снизу 60px */
     font-family: 'Quicksand', sans-serif;
     background: linear-gradient(to right, #0a2647, #4a90e2);
     -webkit-background-clip: text;
