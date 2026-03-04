@@ -7,6 +7,85 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Дополнительные стили для страницы достижений (можно перенести в style.css) */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        .achievement-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-left: 6px solid #ccc;
+            transition: transform 0.2s;
+        }
+        .achievement-card:hover { transform: translateY(-5px); }
+        .achievement-card.bronze { border-left-color: #cd7f32; }
+        .achievement-card.silver { border-left-color: #c0c0c0; }
+        .achievement-card.gold { border-left-color: #ffd700; }
+        .achievement-card.platinum { border-left-color: #b0e0e6; }
+        .achievement-card.completed { background: #f0fff0; }
+        .progress-bar {
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .achievement-card.bronze .progress-fill { background: #cd7f32; }
+        .achievement-card.silver .progress-fill { background: #c0c0c0; }
+        .achievement-card.gold .progress-fill { background: #ffd700; }
+        .achievement-card.platinum .progress-fill { background: #b0e0e6; }
+        .progress-percent {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #4F5A6F;
+            white-space: nowrap;
+        }
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .rating-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            font-weight: bold;
+        }
+        .badge-btn {
+            background: none;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .badge-btn:hover { background: var(--primary-color); color: white; }
+        .badge-btn.active { background: var(--primary-color); color: white; }
+        .filter-btn {
+            background: transparent;
+            border: 1px solid #ddd;
+            padding: 8px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .filter-btn.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+    </style>
 </head>
 <body>
     <!-- Шторка меню (как в index.html) -->
@@ -61,10 +140,10 @@
             <!-- Контейнер достижений -->
             <div id="achievementsContainer" class="achievements-grid"></div>
 
-            <!-- Информация о настройках профиля -->
+            <!-- Информация о настройках профиля (сбрасывается при перезагрузке) -->
             <div class="profile-info" style="margin-top: 30px; padding: 15px; background: #e8f4fd; border-radius: var(--border-radius);">
                 <p><i class="fas fa-info-circle"></i> Текущий значок: <span id="currentBadge">не установлен</span> | Текущий фон: <span id="currentBackground">не установлен</span></p>
-                <p><small>Выбранные значок и фон сохраняются и применяются к иконке профиля и фону страницы.</small></p>
+                <p><small>Выбранные значок и фон применяются к иконке профиля и фону страницы, но сбрасываются после перезагрузки.</small></p>
             </div>
         </main>
 
@@ -82,48 +161,71 @@
     <script src="js/script.js"></script>
     <script>
         (function() {
+            // Определение достижений (неизменны)
             const achievements = [
-                { id: 1, title: 'Часы в кибер арене', desc: 'Проведите время за играми', icon: 'fa-solid fa-clock', type: 'hours',
-                  levels: [
-                      { level: 'bronze', target: 5, rating: 10 },
-                      { level: 'silver', target: 20, rating: 25 },
-                      { level: 'gold', target: 50, rating: 50 },
-                      { level: 'platinum', target: 100, rating: 100 }
-                  ] },
-                { id: 2, title: 'Победы в одиночных турнирах', desc: 'Выигрывайте турниры самостоятельно', icon: 'fa-solid fa-trophy', type: 'solo_wins',
-                  levels: [
-                      { level: 'bronze', target: 1, rating: 15 },
-                      { level: 'silver', target: 5, rating: 40 },
-                      { level: 'gold', target: 15, rating: 80 },
-                      { level: 'platinum', target: 30, rating: 150 }
-                  ] },
-                { id: 3, title: 'Победы в командных турнирах', desc: 'Побеждайте вместе с командой', icon: 'fa-solid fa-users', type: 'team_wins',
-                  levels: [
-                      { level: 'bronze', target: 1, rating: 20 },
-                      { level: 'silver', target: 5, rating: 50 },
-                      { level: 'gold', target: 15, rating: 100 },
-                      { level: 'platinum', target: 30, rating: 200 }
-                  ] },
-                { id: 4, title: 'Участие в турнирах по разным играм', desc: 'Играйте в разные игры на турнирах', icon: 'fa-solid fa-gamepad', type: 'games_participated',
-                  levels: [
-                      { level: 'bronze', target: 2, rating: 10 },
-                      { level: 'silver', target: 5, rating: 30 },
-                      { level: 'gold', target: 10, rating: 60 },
-                      { level: 'platinum', target: 20, rating: 120 }
-                  ] }
+                {
+                    id: 1,
+                    title: 'Часы в кибер арене',
+                    desc: 'Проведите время за играми',
+                    icon: 'fa-solid fa-clock',
+                    type: 'hours',
+                    levels: [
+                        { level: 'bronze', target: 5, rating: 10 },
+                        { level: 'silver', target: 20, rating: 25 },
+                        { level: 'gold', target: 50, rating: 50 },
+                        { level: 'platinum', target: 100, rating: 100 }
+                    ]
+                },
+                {
+                    id: 2,
+                    title: 'Победы в одиночных турнирах',
+                    desc: 'Выигрывайте турниры самостоятельно',
+                    icon: 'fa-solid fa-trophy',
+                    type: 'solo_wins',
+                    levels: [
+                        { level: 'bronze', target: 1, rating: 15 },
+                        { level: 'silver', target: 5, rating: 40 },
+                        { level: 'gold', target: 15, rating: 80 },
+                        { level: 'platinum', target: 30, rating: 150 }
+                    ]
+                },
+                {
+                    id: 3,
+                    title: 'Победы в командных турнирах',
+                    desc: 'Побеждайте вместе с командой',
+                    icon: 'fa-solid fa-users',
+                    type: 'team_wins',
+                    levels: [
+                        { level: 'bronze', target: 1, rating: 20 },
+                        { level: 'silver', target: 5, rating: 50 },
+                        { level: 'gold', target: 15, rating: 100 },
+                        { level: 'platinum', target: 30, rating: 200 }
+                    ]
+                },
+                {
+                    id: 4,
+                    title: 'Участие в турнирах по разным играм',
+                    desc: 'Играйте в разные игры на турнирах',
+                    icon: 'fa-solid fa-gamepad',
+                    type: 'games_participated',
+                    levels: [
+                        { level: 'bronze', target: 2, rating: 10 },
+                        { level: 'silver', target: 5, rating: 30 },
+                        { level: 'gold', target: 10, rating: 60 },
+                        { level: 'platinum', target: 20, rating: 120 }
+                    ]
+                }
             ];
 
-            let userData = JSON.parse(localStorage.getItem('cyberarena_user')) || {
+            // Инициализация данных пользователя: всё с нуля при каждой загрузке
+            let userData = {
                 rating: 0,
                 equippedBadge: null,
                 equippedBackground: null,
                 progress: { hours: 0, solo_wins: 0, team_wins: 0, games_participated: 0 }
             };
 
-            function saveUserData() {
-                localStorage.setItem('cyberarena_user', JSON.stringify(userData));
-            }
-
+            // Функции для работы с данными (без сохранения в localStorage)
             function getProgress(type) {
                 return userData.progress[type] || 0;
             }
@@ -148,14 +250,12 @@
                     if (level) total += level.rating;
                 });
                 userData.rating = total;
-                saveUserData();
                 return total;
             }
 
             function increaseProgress(type) {
                 userData.progress[type] = (userData.progress[type] || 0) + 1;
                 calculateRating();
-                saveUserData();
                 renderAchievements();
                 applyProfileSettings();
             }
@@ -226,6 +326,7 @@
                     container.appendChild(card);
                 });
 
+                // Обработчики кнопок
                 document.querySelectorAll('.badge-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         e.stopPropagation();
@@ -236,9 +337,8 @@
                             const id = btn.dataset.id;
                             const badgeKey = 'badge-'+id;
                             userData.equippedBadge = userData.equippedBadge === badgeKey ? null : badgeKey;
-                            saveUserData();
                             applyProfileSettings();
-                            renderAchievements();
+                            renderAchievements(); // перерисовка для обновления active-класса
                         } else if (action === 'bg') {
                             const id = btn.dataset.id;
                             const level = btn.dataset.level;
@@ -253,7 +353,6 @@
                                 else if (level === 'platinum') bgColor = 'linear-gradient(145deg, #e8f0f8, #b0c4de)';
                                 userData.equippedBackground = bgColor;
                             }
-                            saveUserData();
                             applyProfileSettings();
                             renderAchievements();
                         }
@@ -261,6 +360,7 @@
                 });
             }
 
+            // Фильтрация по уровню
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -272,6 +372,7 @@
                 });
             });
 
+            // Инициализация
             calculateRating();
             renderAchievements();
             applyProfileSettings();
