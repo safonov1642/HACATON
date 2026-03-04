@@ -1,0 +1,638 @@
+:root {
+    --bg-color: #f5f5f5;
+    --text-color: #333;
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+    --light-gray: #ecf0f1;
+    --menu-bg: #fff;
+    --shadow: 0 2px 10px rgba(0,0,0,0.1);
+    --border-radius: 16px;   /* или 20px, если хотите ещё сильнее */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+.page-content {
+    transition: filter 0.3s;
+}
+
+/* Шторка меню */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 1000;
+}
+
+.menu-overlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.menu-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background-color: var(--menu-bg);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-overlay.active .menu-panel {
+    transform: translateX(0);
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.profile-icon {
+    font-size: 3rem;
+    color: var(--primary-color);
+}
+
+.close-menu {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+.menu-content p {
+    margin: 15px 0;
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+
+.menu-content i {
+    width: 25px;
+    color: var(--secondary-color);
+}
+
+/* Шапка */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    background-color: #0a2647;  /* темно-синий */
+    box-shadow: var(--shadow);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700; /* жирность для наклона */
+    font-family: 'Quicksand', sans-serif;
+    font-style: italic;
+    color: #ffffff;
+}
+.burger {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #ffffff;  /* белый */
+}
+
+/* Поиск */
+.search-container {
+    display: flex;
+    max-width: 600px;
+    margin: 30px auto 20px;
+    padding: 0 20px;
+}
+
+.search-container input {
+    flex: 1;
+    padding: 12px 20px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    font-size: 1rem;
+    outline: none;
+}
+
+.search-container button {
+    padding: 12px 20px;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    cursor: pointer;
+}
+
+/* Описание */
+.description {
+    background: #fff;                     /* белый фон */
+    padding: 20px;                         /* внутренние отступы */
+    border-radius: var(--border-radius);   /* скругление углов (8px) */
+    box-shadow: var(--shadow);              /* тень как у карточек */
+    max-width: 800px;
+    margin: 40px auto;
+    text-align: center;
+}
+
+.description h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.description p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;
+}
+
+
+/* Турниры */
+.tournaments {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.tournaments h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+}
+
+.tournament-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.tournament-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tournament-card .date {
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+.tournament-card .game {
+    background-color: var(--light-gray);
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    display: inline-block;
+    width: fit-content;
+}
+
+.tournament-card .title {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* Кнопка создания */
+.create-tournament-link {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.btn {
+    display: inline-block;
+    background-color: var(--secondary-color);
+    color: #fff;
+    padding: 12px 30px;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
+
+/* Страница создания турнира */
+.create-page {
+    max-width: 600px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.create-page h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--primary-color);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.back-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.back-link i {
+    font-size: 1.2rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .menu-panel {
+        width: 80%;
+    }
+
+    .tournament-list {
+        grid-template-columns: 1fr;
+    }
+
+    .create-page {
+        margin: 20px;
+        padding: 20px;
+    }
+}
+/* ===== НИЖНЯЯ ШТОРКА ===== */
+.bottom-bar {
+    background-color: #1a2634;  /* тёмный фон */
+    color: #ecf0f1;
+    padding: 15px 5%;
+    margin-top: 50px;  /* отступ от основного контента */
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-logo img {
+    height: 40px;      /* подберите нужную высоту */
+    width: auto;
+    display: block;
+}
+
+/* Если логотипа нет, можно показать текст */
+.footer-logo::before {
+    content: "МОСКОВСКОЕ ОБРАЗОВАНИЕ IT.МОСКВА";
+    display: none; /* убрать, если используете изображение */
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    .footer-logo img {
+        height: 30px;
+    }
+}
+/* Меню: навигация */
+.menu-nav {
+    flex: 1;
+    margin: 20px 0;
+}
+
+.menu-nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.menu-nav li {
+    margin-bottom: 15px;
+}
+
+.menu-nav a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 1.1rem;
+    display: block;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    transition: color 0.3s;
+}
+
+.menu-nav a:hover {
+    color: var(--secondary-color);
+}
+
+/* Контакты в меню */
+.menu-contacts {
+    margin-top: auto; /* прижимаем к низу, если меню flex-контейнер */
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+}
+
+.menu-contacts p {
+    margin: 10px 0;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.menu-contacts i {
+    width: 25px;
+    color: var(--secondary-color);
+}
+
+/* Чтобы контакты были внизу, меню-панель должно быть flex-колонкой */
+.menu-panel {
+    display: flex;
+    flex-direction: column;
+    /* остальные стили уже есть */
+}
+.menu-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background-color: var(--menu-bg);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column; /* добавляем */
+}
+.back-link {
+    color: #ffffff;
+}
+.back-link:hover {
+    text-decoration: underline;
+    opacity: 0.9;
+}
+.welcome-message {
+     margin: 20px 0 100px 5%;   /* теперь снизу 60px */
+    font-family: 'Quicksand', sans-serif;
+    background: linear-gradient(to right, #0a2647, #4a90e2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    width: fit-content;          /* чтобы фон подстраивался под текст */
+    text-align: left;            /* выравнивание по левому краю */
+}
+
+.line {
+    font-size: 120pt;            /* 60pt * 2 = 120pt */
+    font-weight: 700;            /* максимальная жирность для Quicksand (bold) */
+    font-style: normal;
+    line-height: 1;            /* оставляем или чуть увеличиваем */
+}
+
+/* Если хотите выделить первую строку чуть крупнее, раскомментируйте:
+.line1 {
+    font-size: 70pt;
+    font-weight: 600;
+}
+*/
+/* Достижения */
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+.achievement-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border-left: 6px solid #ccc;
+    transition: transform 0.2s;
+}
+.achievement-card:hover { transform: translateY(-5px); }
+.achievement-card.bronze { border-left-color: #cd7f32; }
+.achievement-card.silver { border-left-color: #c0c0c0; }
+.achievement-card.gold { border-left-color: #ffd700; }
+.achievement-card.platinum { border-left-color: #b0e0e6; }
+.achievement-card.completed { background: #f0fff0; }
+.progress-bar {
+    height: 12px;
+    background: #e9ecef;
+    border-radius: 20px;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+.achievement-card.bronze .progress-fill { background: #cd7f32; }
+.achievement-card.silver .progress-fill { background: #c0c0c0; }
+.achievement-card.gold .progress-fill { background: #ffd700; }
+.achievement-card.platinum .progress-fill { background: #b0e0e6; }
+.progress-percent {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4F5A6F;
+    white-space: nowrap;
+}
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.rating-box {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 20px;
+    border-radius: var(--border-radius);
+    font-weight: bold;
+}
+.badge-btn {
+    background: none;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 4px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+.badge-btn:hover { background: var(--primary-color); color: white; }
+.badge-btn.active { background: var(--primary-color); color: white; }
+
+/* Турниры */
+.tournament-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: 0.2s;
+}
+.tournament-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+}
+.modal.active { display: flex; }
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: var(--border-radius);
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+}
+.close-modal {
+    position: absolute;
+    top: 15px; right: 20px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #aaa;
+}
+.computer-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px,1fr));
+    gap: 10px;
+    margin: 20px 0;
+}
+.computer-option {
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+.computer-option:hover { border-color: var(--secondary-color); }
+.computer-option.selected { border-color: #28a745; background: #d4edda; }
+.bracket {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    background: #f0f0f0;
+    padding: 15px;
+    border-radius: var(--border-radius);
+}
+.bracket-round { margin: 10px; }
+.bracket-match {
+    background: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    min-width: 140px;
+    text-align: center;
+}
+.btn-register { background: #28a745; color: white; border: none; padding: 12px; width: 100%; border-radius: var(--border-radius); }
+.btn-register:hover { background: #218838; }
+
+/* Команды */
+.team-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+}
+.team-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.team-name { font-size: 1.4rem; font-weight: bold; color: var(--primary-color); }
+.team-game { background: var(--light-gray); padding: 5px 12px; border-radius: 20px; }
+.team-rating-badge {
+    background: var(--secondary-color);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+.member-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+.member-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+}
+.btn-danger { background-color: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: var(--border-radius); }
+.btn-danger:hover { background-color: #c82333; }
+.btn-outline { background: transparent; border: 1px solid var(--primary-color); color: var(--primary-color); }
+.btn-outline:hover { background: var(--primary-color); color: white; }
+.create-team-form { max-width: 500px; margin: 30px auto; background: white; padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); }
+.filter-btn {
+    background: transparent; border: 1px solid #ddd; padding: 8px 18px; border-radius: 40px;
+    cursor: pointer; transition: 0.2s;
+}
+.filter-btn.active { background: var(--secondary-color); color: white; border-color: var(--secondary-color); }
