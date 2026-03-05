@@ -1,3 +1,5 @@
+from app.api.v1 import achievements
+app.include_router(achievements.router, prefix="/api/v1")
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings

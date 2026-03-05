@@ -1,27 +1,47 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
-class AchievementLevelSchema(BaseModel):
+class AchievementLevelBase(BaseModel):
     level: str
     target_value: int
     rating: int
 
-class AchievementSchema(BaseModel):
+class AchievementLevelCreate(AchievementLevelBase):
+    pass
+
+class AchievementLevelOut(AchievementLevelBase):
     id: int
-    title: str
-    description: str
-    icon: str
-    type: str
-    levels: List[AchievementLevelSchema]
+    achievement_id: int
 
     class Config:
         from_attributes = True
 
-class UserAchievementSchema(BaseModel):
+class AchievementBase(BaseModel):
+    title: str
+    description: Optional[str] = None
+    icon: str
+    type: str
+
+class AchievementCreate(AchievementBase):
+    levels: List[AchievementLevelCreate]
+
+class AchievementOut(AchievementBase):
+    id: int
+    levels: List[AchievementLevelOut]
+
+    class Config:
+        from_attributes = True
+
+class UserAchievementBase(BaseModel):
     user_id: int
     achievement_id: int
     current_value: int
     completed_levels: List[str]
 
+class UserAchievementOut(UserAchievementBase):
     class Config:
         from_attributes = True
+
+class UpdateProgressRequest(BaseModel):
+    achievement_type: str  # например, "hours"
+    increment: int = 1

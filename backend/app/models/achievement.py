@@ -8,7 +8,7 @@ class Achievement(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
     description = Column(String)
-    icon = Column(String)  # класс иконки, например "fa-solid fa-clock"
+    icon = Column(String)  # например, "fa-solid fa-clock"
     type = Column(String, unique=True, nullable=False)  # hours, solo_wins, team_wins, games_participated
     levels = relationship("AchievementLevel", back_populates="achievement", cascade="all, delete-orphan")
 
