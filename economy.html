@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Экономика и валюта | Киберарена</title>
+    <!-- Подключение Font Awesome (используется в меню и подвале) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Основные стили сайта (предполагается, что файл существует) -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Стили модуля экономики (взяты из economy.html) -->
+    <style>
+        /* ============================================ */
+        /* CSS для модуля Экономики - СВЕТЛЫЙ СТИЛЬ */
+        /* ============================================ */
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        /* -------------------------------------------- */
+        /* Переменные */
+        /* -------------------------------------------- */
+        :root {
+            --bg-primary: #F8FAFE;
+            --bg-container: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --bg-hover: #F5F7FC;
+            --border-light: #E8EDF5;
+            --border-hover: #D0D9E8;
+            
+            --text-primary: #1A1F2E;
+            --text-secondary: #4F5A6F;
+            --text-muted: #7E8AA3;
+            
+            --accent-blue: #3366FF;
+            --accent-blue-light: #EBF0FF;
+            --accent-green: #3ABF7E;
+            --accent-green-light: #E6F7EE;
+            --accent-gold: #FFB800;
+            --accent-gold-light: #FFF9E6;
+            
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Навигация между модулями (как на фото) */
+        .nav-tabs {
+            max-width: 900px;
+            margin: 0 auto 20px;
+            display: flex;
+            gap: 8px;
+            background: white;
+            padding: 6px;
+            border-radius: 60px;
+            border: 1px solid var(--border-light);
+            width: fit-content;
+        }
+
+        .nav-tab {
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: transparent;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nav-tab:hover {
+            color: var(--text-primary);
+            background: var(--bg-hover);
+        }
+
+        .nav-tab.active {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        /* Основной контейнер экономики */
+        .economy-container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            background: var(--bg-container);
+            border-radius: 24px;
+            border: 1px solid var(--border-light);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Шапка с балансом */
+        .balance-header {
+            padding: 28px;
+            background: white;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .balance-info h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            margin-bottom: 4px;
+        }
+
+        .balance-info p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .balance-card {
+            background: var(--accent-blue-light);
+            border: 1px solid var(--accent-blue);
+            border-radius: 60px;
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .balance-amount {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .balance-amount span {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+
+        .balance-amount small {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .balance-stats {
+            display: flex;
+            gap: 20px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .balance-stats div {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .balance-stats strong {
+            color: var(--text-primary);
+            font-size: 15px;
+        }
+
+        /* Вкладки внутри модуля */
+        .section-tabs {
+            padding: 0 28px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            gap: 24px;
+        }
+
+        .section-tab {
+            padding: 16px 0;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .section-tab:hover {
+            color: var(--text-primary);
+        }
+
+        .section-tab.active {
+            color: var(--accent-blue);
+            border-bottom-color: var(--accent-blue);
+        }
+
+        /* Секции контента */
+        .section-content {
+            padding: 28px;
+        }
+
+        /* === МАГАЗИН === */
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        .shop-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 20px;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .shop-item:hover {
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .item-preview {
+            width: 60px;
+            height: 60px;
+            background: var(--bg-hover);
+            border-radius: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .item-category {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+            margin-bottom: 4px;
+        }
+
+        .item-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .item-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 16px;
+            flex: 1;
+        }
+
+        .item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .item-price {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+            color: var(--accent-blue);
+        }
+
+        .item-price::before {
+            content: "💰";
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .buy-btn {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .buy-btn:hover {
+            background: #2952CC;
+            transform: scale(1.05);
+        }
+
+        .buy-btn:disabled {
+            background: var(--border-light);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* === ИСТОРИЯ ТРАНЗАКЦИЙ === */
+        .transactions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .transaction-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .transaction-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .transaction-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-hover);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .transaction-icon.earn {
+            background: var(--accent-green-light);
+            color: var(--accent-green);
+        }
+
+        .transaction-icon.spend {
+            background: var(--accent-blue-light);
+            color: var(--accent-blue);
+        }
+
+        .transaction-details h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .transaction-details p {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .transaction-right {
+            text-align: right;
+        }
+
+        .transaction-amount {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .transaction-amount.positive {
+            color: var(--accent-green);
+        }
+
+        .transaction-amount.negative {
+            color: var(--accent-blue);
+        }
+
+        .transaction-date {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        /* === ИНВЕНТАРЬ === */
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .inventory-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 16px;
+            position: relative;
+        }
+
+        .inventory-item.equipped {
+            border-color: var(--accent-blue);
+            background: var(--accent-blue-light);
+        }
+
+        .inventory-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--accent-blue);
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+
+        .inventory-preview {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .inventory-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .inventory-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .equip-btn {
+            flex: 1;
+            padding: 6px;
+            border: 1px solid var(--border-light);
+            background: white;
+            border-radius: 30px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .equip-btn:hover {
+            background: var(--bg-hover);
+        }
+
+        .equip-btn.equipped {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+        }
+
+        /* === СЕЗОНЫ === */
+        .season-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .season-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .season-name {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .season-badge {
+            background: var(--accent-gold-light);
+            border: 1px solid var(--accent-gold);
+            color: #B87C00;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .season-progress {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--border-light);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-blue);
+            width: 0%;
+            border-radius: 10px;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .reward-item {
+            background: var(--bg-hover);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .reward-points {
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 4px;
+        }
+
+        .reward-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* === СОСТОЯНИЯ === */
+        .loading-state, .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--bg-hover);
+            border-radius: 16px;
+            border: 1px dashed var(--border-light);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border-light);
+            border-top: 3px solid var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 640px) {
+            .nav-tabs {
+                width: 100%;
+                overflow-x: auto;
+            }
+
+            .balance-header {
+                padding: 20px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .balance-card {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .balance-stats {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .balance-stats div {
+                align-items: flex-start;
+            }
+
+            .section-tabs {
+                padding: 0 20px;
+                overflow-x: auto;
+                gap: 16px;
+            }
+
+            .section-content {
+                padding: 20px;
+            }
+
+            .shop-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .transaction-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .transaction-right {
+                text-align: left;
+                width: 100%;
+                padding-left: 64px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шторка меню (копия из index.html) -->
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="menu-panel">
+            <div class="menu-header">
+                <div class="profile-icon"><i class="fas fa-user-circle"></i></div>
+                <button class="close-menu" id="closeMenu"><i class="fas fa-times"></i></button>
+            </div>
+            <nav class="menu-nav">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="booking.html">Бронирование</a></li>
+                    <li><a href="calendar.html">Календарь занятости</a></li>
+                    <li><a href="achievements.html">Достижения и прогресс</a></li>
+                    <li><a href="tournaments.html">Турниры и соревнования</a></li>
+                    <li><a href="teams.html">Команды</a></li>
+                    <li><a href="feed.html">Лента событий</a></li>
+                    <li><a href="economy.html">Экономика</a></li>
+                </ul>
+            </nav>
+            <div class="menu-contacts">
+                <p><i class="fas fa-envelope"></i> orden@gmail.com </p>
+                <p><i class="fab fa-telegram"></i> Руководитель проекта: @safonovta</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content">
+             <header>
+    <div class="logo">
+        <img src="images/ItLogo2.png" alt="Киберарена ИТ.Москва">
+    </div>
+    
+    <button class="burger" id="burgerBtn">
+        <i class="fas fa-bars"></i>
+    </button>
+</header>
+
+        <main>
+            <!-- Вставка модуля экономики из economy.html -->
+            <!-- Навигация между модулями (как на фото) -->
+           
+
+            <!-- Основной контейнер экономики -->
+            <div class="economy-container">
+                <!-- Шапка с балансом -->
+                <div class="balance-header">
+                    <div class="balance-info">
+                        <h1>Экономика арены</h1>
+                        <p>Зарабатывай за активности и трать на крутые штуки</p>
+                    </div>
+                    <div class="balance-card">
+                        <div class="balance-amount">
+                            <span>1,250</span>
+                            <small>AP</small>
+                        </div>
+                        <div class="balance-stats">
+                            <div>
+                                <strong>+3,450</strong>
+                                <span>заработано</span>
+                            </div>
+                            <div>
+                                <strong>2,200</strong>
+                                <span>потрачено</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вкладки внутри модуля -->
+                <div class="section-tabs">
+                    <div class="section-tab active" data-section="shop">🛍️ Магазин</div>
+                    <div class="section-tab" data-section="transactions">📋 История</div>
+                    <div class="section-tab" data-section="inventory">🎒 Инвентарь</div>
+                    <div class="section-tab" data-section="seasons">🏆 Сезоны</div>
+                </div>
+
+                <!-- Контент: Магазин (активная вкладка) -->
+                <div class="section-content" id="shop-section">
+                    <div class="shop-grid">
+                        <!-- Косметика: Цвет ника -->
+                        <div class="shop-item" data-id="1">
+                            <div class="item-preview" style="color: #FF4500;">🔥</div>
+                            <div class="item-category">Косметика</div>
+                            <div class="item-name">Огненный ник</div>
+                            <div class="item-description">Твой никнейм горит красным в чате и ленте</div>
+                            <div class="item-footer">
+                                <span class="item-price">50 AP</span>
+                                <button class="buy-btn" onclick="buyItem(1)">Купить</button>
+                            </div>
+                        </div>
+
+                        <!-- Косметика: Рамка профиля -->
+                        <div class="shop-item" data-id="2">
+                            <div class="item-preview">🖼️</div>
+                            <div class="item-category">Косметика</div>
+                            <div class="item-name">Рамка профиля</div>
+                            <div class="item-description">Эксклюзивная рамка для твоего аватара</div>
+                            <div class="item-footer">
+                                <span class="item-price">100 AP</span>
+                                <button class="buy-btn" onclick="buyItem(2)">Купить</button>
+                            </div>
+                        </div>
+
+                        <!-- Функционал: Приоритетное бронирование -->
+                        <div class="shop-item" data-id="3">
+                            <div class="item-preview">⚡</div>
+                            <div class="item-category">Функционал</div>
+                            <div class="item-name">Приоритет</div>
+                            <div class="item-description">Бронируй за 1 час до официального открытия</div>
+                            <div class="item-footer">
+                                <span class="item-price">150 AP</span>
+                                <button class="buy-btn" onclick="buyItem(3)">Купить</button>
+                            </div>
+                        </div>
+
+                        <!-- Косметика: Набор эмодзи -->
+                        <div class="shop-item" data-id="4">
+                            <div class="item-preview">😎</div>
+                            <div class="item-category">Косметика</div>
+                            <div class="item-name">Кибер-эмодзи</div>
+                            <div class="item-description">10 эксклюзивных эмодзи для чата</div>
+                            <div class="item-footer">
+                                <span class="item-price">30 AP</span>
+                                <button class="buy-btn" onclick="buyItem(4)">Купить</button>
+                            </div>
+                        </div>
+
+                        <!-- Функционал: Билет на закрытый турнир -->
+                        <div class="shop-item" data-id="5">
+                            <div class="item-preview">🎫</div>
+                            <div class="item-category">Функционал</div>
+                            <div class="item-name">Билет на закрытый турнир</div>
+                            <div class="item-description">Участвуй в эксклюзивных соревнованиях</div>
+                            <div class="item-footer">
+                                <span class="item-price">300 AP</span>
+                                <button class="buy-btn" onclick="buyItem(5)">Купить</button>
+                            </div>
+                        </div>
+
+                        <!-- Косметика: Титул -->
+                        <div class="shop-item" data-id="6">
+                            <div class="item-preview">👑</div>
+                            <div class="item-category">Косметика</div>
+                            <div class="item-name">Титул "Ветеран"</div>
+                            <div class="item-description">Особый титул рядом с ником</div>
+                            <div class="item-footer">
+                                <span class="item-price">200 AP</span>
+                                <button class="buy-btn" onclick="buyItem(6)">Купить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Контент: История транзакций (скрыт) -->
+                <div class="section-content" id="transactions-section" style="display: none;">
+                    <div class="transactions-list">
+                        <!-- Заработано: бронирование -->
+                        <div class="transaction-item">
+                            <div class="transaction-left">
+                                <div class="transaction-icon earn">📅</div>
+                                <div class="transaction-details">
+                                    <h4>Бронирование игровой зоны</h4>
+                                    <p>Игровая зона A • 18:00-20:00</p>
+                                </div>
+                            </div>
+                            <div class="transaction-right">
+                                <div class="transaction-amount positive">+10 AP</div>
+                                <div class="transaction-date">сегодня, 17:30</div>
+                            </div>
+                        </div>
+
+                        <!-- Заработано: достижение -->
+                        <div class="transaction-item">
+                            <div class="transaction-left">
+                                <div class="transaction-icon earn">🏆</div>
+                                <div class="transaction-details">
+                                    <h4>Достижение: 5 бронирований</h4>
+                                    <p>Редкое достижение</p>
+                                </div>
+                            </div>
+                            <div class="transaction-right">
+                                <div class="transaction-amount positive">+50 AP</div>
+                                <div class="transaction-date">вчера, 14:20</div>
+                            </div>
+                        </div>
+
+                        <!-- Потрачено: покупка -->
+                        <div class="transaction-item">
+                            <div class="transaction-left">
+                                <div class="transaction-icon spend">🛒</div>
+                                <div class="transaction-details">
+                                    <h4>Покупка: Огненный ник</h4>
+                                    <p>Косметика для профиля</p>
+                                </div>
+                            </div>
+                            <div class="transaction-right">
+                                <div class="transaction-amount negative">-50 AP</div>
+                                <div class="transaction-date">20 мая 2026</div>
+                            </div>
+                        </div>
+
+                        <!-- Заработано: турнир -->
+                        <div class="transaction-item">
+                            <div class="transaction-left">
+                                <div class="transaction-icon earn">🎮</div>
+                                <div class="transaction-details">
+                                    <h4>Победа в турнире CS:GO</h4>
+                                    <p>1 место • Весенний кубок</p>
+                                </div>
+                            </div>
+                            <div class="transaction-right">
+                                <div class="transaction-amount positive">+200 AP</div>
+                                <div class="transaction-date">15 мая 2026</div>
+                            </div>
+                        </div>
+
+                        <!-- Потрачено: приоритет -->
+                        <div class="transaction-item">
+                            <div class="transaction-left">
+                                <div class="transaction-icon spend">⚡</div>
+                                <div class="transaction-details">
+                                    <h4>Приоритетное бронирование</h4>
+                                    <p>30 дней доступа</p>
+                                </div>
+                            </div>
+                            <div class="transaction-right">
+                                <div class="transaction-amount negative">-150 AP</div>
+                                <div class="transaction-date">10 мая 2026</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Контент: Инвентарь (скрыт) -->
+                <div class="section-content" id="inventory-section" style="display: none;">
+                    <div class="inventory-grid">
+                        <!-- Надетый предмет -->
+                        <div class="inventory-item equipped">
+                            <div class="inventory-badge">НАДЕТО</div>
+                            <div class="inventory-preview" style="color: #FF4500;">🔥</div>
+                            <div class="inventory-name">Огненный ник</div>
+                            <div class="inventory-actions">
+                                <button class="equip-btn equipped" onclick="toggleEquip(1)">Надето</button>
+                            </div>
+                        </div>
+
+                        <!-- Доступный предмет -->
+                        <div class="inventory-item">
+                            <div class="inventory-preview">🖼️</div>
+                            <div class="inventory-name">Рамка профиля</div>
+                            <div class="inventory-actions">
+                                <button class="equip-btn" onclick="toggleEquip(2)">Надеть</button>
+                            </div>
+                        </div>
+
+                        <!-- Доступный предмет -->
+                        <div class="inventory-item">
+                            <div class="inventory-preview">👑</div>
+                            <div class="inventory-name">Титул "Ветеран"</div>
+                            <div class="inventory-actions">
+                                <button class="equip-btn" onclick="toggleEquip(3)">Надеть</button>
+                            </div>
+                        </div>
+
+                        <!-- Предмет с количеством -->
+                        <div class="inventory-item">
+                            <div class="inventory-preview">🎫</div>
+                            <div class="inventory-name">Билет на турнир</div>
+                            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">2 шт.</div>
+                            <div class="inventory-actions">
+                                <button class="equip-btn" onclick="useItem(4)">Использовать</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Контент: Сезоны (скрыт) -->
+                <div class="section-content" id="seasons-section" style="display: none;">
+                    <div class="season-card">
+                        <div class="season-header">
+                            <span class="season-name">🌼 Весенний сезон 2026</span>
+                            <span class="season-badge">x2 на турниры</span>
+                        </div>
+                        <p style="color: var(--text-secondary); margin-bottom: 16px;">Удвоенные награды за участие в турнирах. Успей до конца сезона!</p>
+                        
+                        <div class="season-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%;"></div>
+                            </div>
+                            <div class="progress-stats">
+                                <span>21 день до конца</span>
+                                <span>65% сезона</span>
+                            </div>
+                        </div>
+
+                        <div style="font-weight: 600; margin-bottom: 12px;">Награды сезона:</div>
+                        <div class="rewards-grid">
+                            <div class="reward-item">
+                                <div class="reward-points">500 AP</div>
+                                <div class="reward-desc">за 5 турниров</div>
+                            </div>
+                            <div class="reward-item">
+                                <div class="reward-points">🔥 Эксклюзив</div>
+                                <div class="reward-desc">Рамка "Весна"</div>
+                            </div>
+                            <div class="reward-item">
+                                <div class="reward-points">1000 AP</div>
+                                <div class="reward-desc">за 10 побед</div>
+                            </div>
+                            <div class="reward-item">
+                                <div class="reward-points">👑 Титул</div>
+                                <div class="reward-desc">"Легенда сезона"</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="season-card" style="opacity: 0.8;">
+                        <div class="season-header">
+                            <span class="season-name">❄️ Зимний сезон 2025</span>
+                            <span class="season-badge">Завершен</span>
+                        </div>
+                        <p style="color: var(--text-secondary);">Сезон закончился 28 февраля 2026</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Нижняя шторка с логотипом -->
+        <footer class="bottom-bar">
+            <div class="footer-content">
+                <p>© 2026 Киберарена ГБПОУ ИТ.Москва</p>
+                <div class="footer-logo">
+                    <img src="images/Group 2131329240.png" alt="Московское образование IT.Москва">
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Подключение основного скрипта сайта -->
+    <script src="js/script.js"></script>
+    
+    <!-- Скрипт модуля экономики (из economy.html) -->
+    <script>
+        // Простая навигация между вкладками
+        document.querySelectorAll('.section-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Убираем активный класс у всех вкладок
+                document.querySelectorAll('.section-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                // Прячем все секции
+                document.querySelectorAll('.section-content').forEach(section => {
+                    section.style.display = 'none';
+                });
+
+                // Показываем нужную секцию
+                const sectionId = tab.dataset.section;
+                document.getElementById(`${sectionId}-section`).style.display = 'block';
+            });
+        });
+
+        // Функции для демонстрации интерактивности
+        function buyItem(itemId) {
+            alert(`Покупка предмета #${itemId} (демо-режим)`);
+        }
+
+        function toggleEquip(itemId) {
+            alert(`Переключение экипировки предмета #${itemId} (демо-режим)`);
+        }
+
+        function useItem(itemId) {
+            alert(`Использование предмета #${itemId} (демо-режим)`);
+        }
+    </script>
+</body>
+</html>

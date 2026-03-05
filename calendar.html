@@ -24,7 +24,7 @@
                     <li><a href="tournaments.html">Турниры и соревнования</a></li>
                     <li><a href="teams.html">Команды</a></li>
                     <li><a href="feed.html">Лента событий</a></li>
-                    <li><a href="economy.html">Экономика</a></li>
+                    <li><a href="economy.html">Валюта</a></li>
                 </ul>
             </nav>
             <div class="menu-contacts">
@@ -35,20 +35,64 @@
     </div>
 
     <div class="page-content">
-           <header>
-    <div class="logo">
-        <img src="images/ItLogo2.png" alt="Киберарена ИТ.Москва">
-    </div>
-    
-    <button class="burger" id="burgerBtn">
-        <i class="fas fa-bars"></i>
-    </button>
-</header>
+       <header>
+        <div class="logo">КиберАрена IT.Москва</div>
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> На главную</a>
+    </header>
 
         <main>
-            <h1>Календарь занятости</h1>
-            <p>Страница с календарём свободного времени и бронирований.</p>
-            <!-- Сюда можно добавлять свой код для этого модуля -->
+            <main>
+    <h1>Календарь занятости</h1>
+
+    <!-- Шаг 1: выбор зоны -->
+    <div id="step1">
+        <p class="zone-prompt">Выберите зону:</p>
+        <div class="filter-bar" id="zoneTypeButtons">
+            <button class="filter-btn" data-type="gaming">Игровая</button>
+            <button class="filter-btn" data-type="training">Тренировочная</button>
+            <button class="filter-btn" data-type="team">Командная</button>
+        </div>
+    </div>
+
+    <!-- Шаг 2: выбор времени и устройства (изначально скрыт) -->
+    <div id="step2" style="display: none;">
+    <p class="zone-prompt">Выберите время и устройство:</p>
+    
+    <!-- Переключатель типа устройства -->
+    <div class="device-switch" style="display: flex; gap: 20px; justify-content: center; margin-bottom: 30px;">
+        <label class="device-option">
+            <input type="radio" name="device" value="pc" checked> <i class="fas fa-keyboard"></i> ПК
+        </label>
+        <label class="device-option">
+            <input type="radio" name="device" value="console"> <i class="fas fa-gamepad"></i> Консоль
+        </label>
+    </div>
+
+    <!-- Выбор даты -->
+    <div style="text-align: center; margin-bottom: 20px;">
+    <div class="date-picker-wrapper">
+        <label for="bookingDate">Выберите дату:</label>
+        <input type="date" id="bookingDate">
+    </div>
+</div>
+
+    <!-- Динамические подсказки -->
+    <div id="timeSelectionPrompt" style="text-align: center; color: #000000; font-weight: 500; margin-bottom: 20px; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 50px;">
+        👇 Выберите время начала
+    </div>
+
+    <!-- Сетка времени для выбранной зоны -->
+    <div id="timeSlots" class="time-grid"></div>
+
+    <!-- Кнопки управления -->
+    <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+        <button class="btn btn-outline" id="resetSelection" style="display: none;"><i class="fas fa-undo"></i> Сбросить выбор</button>
+        <button class="btn btn-success" id="confirmBookingBtn" style="display: none; background: linear-gradient(45deg, #28a745, #218838);"><i class="fas fa-check"></i> Подтвердить бронирование</button>
+        <button class="btn btn-outline" id="backToZones"><i class="fas fa-arrow-left"></i> Назад к выбору зоны</button>
+    </div>
+</div>
+
+</main>
         </main>
 
         <!-- Нижняя шторка с логотипом -->
@@ -63,5 +107,7 @@
     </div>
 
     <script src="js/script.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/calendar.js"></script>
 </body>
 </html>

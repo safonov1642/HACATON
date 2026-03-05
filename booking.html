@@ -24,7 +24,7 @@
                     <li><a href="tournaments.html">Турниры и соревнования</a></li>
                     <li><a href="teams.html">Команды</a></li>
                     <li><a href="feed.html">Лента событий</a></li>
-                    <li><a href="economy.html">Экономика</a></li>
+                    <li><a href="economy.html">Валюта</a></li>
                 </ul>
             </nav>
             <div class="menu-contacts">
@@ -35,21 +35,64 @@
     </div>
 
     <div class="page-content">
-             <header>
-    <div class="logo">
-        <img src="images/ItLogo2.png" alt="Киберарена ИТ.Москва">
-    </div>
-    
-    <button class="burger" id="burgerBtn">
-        <i class="fas fa-bars"></i>
-    </button>
-</header>
+        <header>
+        <div class="logo">КиберАрена IT.Москва</div>
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> На главную</a>
+    </header>
 
         <main>
-            <h1>Бронирование</h1>
-            <p>Здесь будет функционал бронирования оборудования и мест на киберарене.</p>
-            <!-- Сюда можно добавлять свой код для этого модуля -->
-        </main>
+            <main>
+    <h1>Бронирование</h1>
+
+    <!-- Переключатель активные/завершённые -->
+    
+
+    <!-- Кнопка для быстрого создания брони -->
+    <div style="text-align: center; margin-top: 40px;">
+    <a href="calendar.html" class="btn" id="quickBookLink" style="margin-bottom: 20px; padding: 16px 40px; font-size: 1.5rem; display: inline-block; text-decoration: none;">Забронировать зону</a>
+</div>
+
+    <!-- Список броней -->
+    <div id="bookingsList" class="bookings-list"></div>
+
+    <!-- Модальное окно для создания брони -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2><i class="fas fa-calendar-plus"></i> Новое бронирование</h2>
+            <form id="bookingForm">
+                <div class="form-group">
+                    <label>Зона</label>
+                    <select id="modalZoneSelect" class="form-control" required>
+                        <option value="">Выберите зону</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Дата</label>
+                    <input type="date" id="bookingDate" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Время начала</label>
+                    <input type="time" id="bookingStart" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Длительность (часы)</label>
+                    <select id="bookingDuration" class="form-control">
+                        <option value="1">1 час</option>
+                        <option value="2">2 часа</option>
+                        <option value="3">3 часа</option>
+                        <option value="4">4 часа</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Совместные участники (email через запятую)</label>
+                    <input type="text" id="bookingParticipants" class="form-control" placeholder="friend@mail.ru">
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Забронировать</button>
+            </form>
+        </div>
+    </div>
+
 
         <!-- Нижняя шторка с логотипом -->
         <footer class="bottom-bar">
@@ -63,5 +106,7 @@
     </div>
 
     <script src="js/script.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/bookings.js"></script>
 </body>
 </html>
