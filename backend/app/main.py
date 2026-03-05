@@ -23,3 +23,7 @@ app.include_router(users.router, prefix="/api/v1")
 @app.get("/")
 def root():
     return {"message": "Welcome to CyberArena API"}
+from app.api.v1 import zones, bookings, calendar
+app.include_router(zones.router, prefix="/api/v1")
+app.include_router(bookings.router, prefix="/api/v1")
+app.include_router(calendar.router, prefix="/api/v1")
