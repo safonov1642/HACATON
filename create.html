@@ -5,117 +5,119 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Создание турнира | Киберарена</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        /* Дополнительные стили для компактного расположения полей даты и часа */
-        .datetime-group {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .datetime-group .form-group {
-            flex: 1;
-            margin-bottom: 0;
-        }
-        .datetime-group .form-group:first-child {
-            flex: 2;
-        }
-        .hour-select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-        }
-    </style>
 </head>
 <body>
-        <header>
-    <div class="logo">
-        <img src="images/ItLogo2.png" alt="Киберарена ИТ.Москва">
+    <!-- Шторка меню (как в index.html) -->
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="menu-panel">
+            <div class="menu-header">
+                <div class="profile-icon"><i class="fas fa-user-circle"></i></div>
+                <button class="close-menu" id="closeMenu"><i class="fas fa-times"></i></button>
+            </div>
+            <nav class="menu-nav">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="booking.html">Бронирование</a></li>
+                    <li><a href="calendar.html">Календарь занятости</a></li>
+                    <li><a href="achievements.html">Достижения и прогресс</a></li>
+                    <li><a href="tournaments.html">Турниры и соревнования</a></li>
+                    <li><a href="teams.html">Команды</a></li>
+                    <li><a href="feed.html">Лента событий</a></li>
+                </ul>
+            </nav>
+            <div class="menu-contacts">
+                <p><i class="fas fa-envelope"></i> dev@itcollege.ru</p>
+                <p><i class="fas fa-phone"></i> +7 (495) 123-45-67</p>
+                <p><i class="fab fa-telegram"></i> @cyberarena_dev</p>
+            </div>
+        </div>
     </div>
-    
-    <button class="burger" id="burgerBtn">
-        <i class="fas fa-bars"></i>
-    </button>
-</header>
 
-    <main class="create-page">
-        <h1>Организация турнира</h1>
-        <form id="tournamentForm">
-            <div class="form-group">
-                <label for="name">Название турнира</label>
-                <input type="text" id="name" name="name" required>
-            </div>
+    <div class="page-content">
+        <header>
+            <div class="logo">КиберАрена IT.Москва</div>
+            <button class="burger" id="burgerBtn"><i class="fas fa-bars"></i></button>
+        </header>
 
-            <div class="form-group">
-                <label for="game">Платформа (игра)</label>
-                <select id="game" name="game" required>
-                    <option value="">Выберите игру</option>
-                    <option value="csgo">CS:GO</option>
-                    <option value="dota2">Dota 2</option>
-                    <option value="valorant">Valorant</option>
-                    <option value="lol">League of Legends</option>
-                    <option value="overwatch">Overwatch 2</option>
-                    <option value="rainbow6">Rainbow Six Siege</option>
-                </select>
-            </div>
-
-            <!-- Блок выбора даты и часа (минуты всегда 00) -->
-            <div class="datetime-group">
+        <main class="create-page">
+            <h1>Организация турнира</h1>
+            <form id="tournamentForm">
                 <div class="form-group">
-                    <label for="tournamentDate">Дата турнира</label>
-                    <input type="date" id="tournamentDate" name="date" required>
+                    <label for="name">Название турнира</label>
+                    <input type="text" id="name" required>
                 </div>
                 <div class="form-group">
-                    <label for="tournamentHour">Час</label>
-                    <select id="tournamentHour" class="hour-select" required>
-                        <option value="">Выберите час</option>
-                        <!-- Генерируем опции от 0 до 23 -->
-                        <script>
-                            for (let h = 0; h < 24; h++) {
-                                let hourStr = h.toString().padStart(2, '0');
-                                document.write(`<option value="${h}">${hourStr}:00</option>`);
-                            }
-                        </script>
+                    <label for="game">Платформа (игра)</label>
+                    <select id="game" required>
+                        <option value="">Выберите игру</option>
+                        <option value="CS:GO">CS:GO</option>
+                        <option value="Dota 2">Dota 2</option>
+                        <option value="Valorant">Valorant</option>
+                        <option value="League of Legends">League of Legends</option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label for="teamSize">Размер команды</label>
+                    <select id="teamSize" required>
+                        <option value="1">1 (индивидуальный)</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="5" selected>5</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date">Дата и время</label>
+                    <input type="datetime-local" id="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Описание</label>
+                    <textarea id="description" rows="5" placeholder="Расскажите подробнее..."></textarea>
+                </div>
+                <button type="submit" class="btn">Создать турнир</button>
+            </form>
+        </main>
+
+        <!-- Нижняя шторка -->
+        <footer class="bottom-bar">
+            <div class="footer-content">
+                <p>© 2026 Киберарена ГБПОУ ИТ.Москва</p>
+                <div class="footer-logo">
+                    <img src="images/Group 2131329240.png" alt="Московское образование IT.Москва">
+                </div>
             </div>
+        </footer>
+    </div>
 
-            <div class="form-group">
-                <label for="description">Описание турнира</label>
-                <textarea id="description" name="description" rows="5" placeholder="Расскажите подробнее о турнире..."></textarea>
-            </div>
-
-            <button type="submit" class="btn">Создать турнир</button>
-        </form>
-    </main>
-
+    <script src="js/script.js"></script>
     <script>
         document.getElementById('tournamentForm').addEventListener('submit', (e) => {
             e.preventDefault();
-
-            const name = document.getElementById('name').value;
+            const name = document.getElementById('name').value.trim();
             const game = document.getElementById('game').value;
-            const date = document.getElementById('tournamentDate').value;
-            const hour = document.getElementById('tournamentHour').value;
-            const description = document.getElementById('description').value;
-
-            if (!date || !hour) {
-                alert('Пожалуйста, выберите дату и час турнира.');
+            const teamSize = parseInt(document.getElementById('teamSize').value);
+            const date = document.getElementById('date').value;
+            const description = document.getElementById('description').value.trim();
+            if (!name || !game || !date) {
+                alert('Заполните все обязательные поля');
                 return;
             }
-
-            // Формируем строку даты и времени в локальном формате для отображения
-            const selectedDate = new Date(date);
-            const day = selectedDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
-            const hourPadded = hour.padStart(2, '0');
-            const dateTimeStr = `${day} в ${hourPadded}:00`;
-
-            // Для реальной отправки на сервер можно создать ISO-строку, например:
-            // const isoString = `${date}T${hourPadded}:00:00`;
-
-            alert(`Турнир "${name}" создан!\nИгра: ${game}\nДата и время: ${dateTimeStr}\nОписание: ${description || 'не указано'}`);
+            const newTournament = {
+                id: Date.now(),
+                name,
+                game,
+                teamSize,
+                date,
+                description,
+                teams: [],
+                bracket: []
+            };
+            let tournaments = JSON.parse(localStorage.getItem('tournaments')) || [];
+            tournaments.push(newTournament);
+            localStorage.setItem('tournaments', JSON.stringify(tournaments));
+            alert('Турнир создан!');
+            window.location.href = 'tournaments.html';
         });
     </script>
 </body>
